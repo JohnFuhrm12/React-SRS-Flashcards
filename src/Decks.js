@@ -71,7 +71,6 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
           return (
             <div className='decks'>
               <button onClick={study}>{deck.name}</button>
-                <button>Add Card</button>
                 <button>Delete</button>
             </div>
           )

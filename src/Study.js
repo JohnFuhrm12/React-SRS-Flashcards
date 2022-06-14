@@ -1,7 +1,6 @@
 import './App.css';
 import axios from "axios";
 import React, {useState, useEffect, useRef} from "react";
-import Modal from './Modal';
 
 // Firebase imports
 import firebase from 'firebase/compat/app';
@@ -24,7 +23,7 @@ const firestore = firebase.firestore();
 const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [response, setResponse] = useState(false);
   const cardsRef = firestore.collection('cards');
   const decksRef = firestore.collection('decks');
 
@@ -41,18 +40,16 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
     }, [])
 
-    function open() {
-      setOpenModal(true);
-    };
+    function handleResponse() {
+        setResponse(true);
+    }
+
+    function handleAnswer() {
+        setResponse(false);
+    }
 
   return (
     <div className='page'>
-        <h1>{currentDeck}</h1>
-        <div className='Cardsbuttons'>
-            <button onClick={open}>Add Card</button>
-            <button>Study</button>
-        </div>
-        {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck}/>}
         {cards.map((card) => {
           if (card.deck === currentDeck) {
             return (
@@ -62,6 +59,15 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
+        <div className='responses'>
+            {response===true ? <>
+            <button onClick={handleAnswer}>Again</button>
+            <button onClick={handleAnswer}>Easy</button>
+            <button onClick={handleAnswer}>Normal</button>
+            <button onClick={handleAnswer}>Hard</button></> : <>
+            <button onClick={handleResponse}>Show Response</button>
+            </>}
+        </div>
     </div>
   );
 }

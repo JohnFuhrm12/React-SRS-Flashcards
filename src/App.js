@@ -9,7 +9,6 @@ const App = () => {
 
   return (
       <>
-      {currentDeck}
       {studying==="" ? <Decks studying={studying} setStudying={setStudying} currentDeck={currentDeck} setCurrentDeck={setCurrentDeck} />
        : 
        <Cards studying={studying} setStudying={setStudying} currentDeck={currentDeck} setCurrentDeck={setCurrentDeck} />}
