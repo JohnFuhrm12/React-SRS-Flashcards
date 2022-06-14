@@ -20,7 +20,7 @@ firebase.initializeApp({
 
 const firestore = firebase.firestore();
 
-const Cards = ( {studying, setStudying}) => {
+const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
   const [response, setResponse] = useState(false);
@@ -51,11 +51,13 @@ const Cards = ( {studying, setStudying}) => {
   return (
     <div className='page'>
         {cards.map((card) => {
-          return (
-            <div>
-                {card.front}
-            </div>
-          )
+          if (card.deck === currentDeck) {
+            return (
+              <div>
+                  {card.front}
+              </div>
+            )
+          }
         })}
         <div className='responses'>
             {response===true ? <>

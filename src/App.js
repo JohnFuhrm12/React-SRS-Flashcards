@@ -5,11 +5,14 @@ import Cards from './Cards';
 
 const App = () => {
   const [studying, setStudying] = useState("");
+  const [currentDeck, setCurrentDeck] = useState("none");
 
   return (
       <>
-      {studying}
-      {studying==="" ? <Decks studying={studying} setStudying={setStudying} /> : <Cards studying={studying} setStudying={setStudying}/>}
+      {currentDeck}
+      {studying==="" ? <Decks studying={studying} setStudying={setStudying} currentDeck={currentDeck} setCurrentDeck={setCurrentDeck} />
+       : 
+       <Cards studying={studying} setStudying={setStudying} currentDeck={currentDeck} setCurrentDeck={setCurrentDeck} />}
       </>
   )
 }

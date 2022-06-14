@@ -19,7 +19,7 @@ firebase.initializeApp({
 
 const firestore = firebase.firestore();
 
-const Decks = ( {studying, setStudying}) => {
+const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
   const [newDeckName, setNewDeckName] = useState("");
@@ -48,13 +48,16 @@ const Decks = ( {studying, setStudying}) => {
         window.location.reload(false);
     }
 
-    function study() {
-        setStudying('true')
-    }
+    function study(e) {
+        setStudying('true');
+        setCurrentDeck(e.target.innerText);
+      
+    };
 
     function handleChange(e) {
         setNewDeckName(e.target.value);
       };
+
 
   return (
     <div className='page'>
