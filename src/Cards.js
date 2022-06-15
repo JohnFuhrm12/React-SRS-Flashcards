@@ -7,7 +7,7 @@ import Modal from './Modal';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { getDocs } from "firebase/firestore";
+import { collection, doc, deleteDoc, getDocs, query, where, getFirestore } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -28,6 +28,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const cardsRef = firestore.collection('cards');
   const decksRef = firestore.collection('decks');
 
+  // Need a new reference to work correctly with deletion
+  const decksRef2 = collection(firestore, "decks");
+
   useEffect(() => {
     const getDbmessages = async () => {
       const cards = await getDocs(cardsRef);
@@ -41,13 +44,39 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
     }, [])
 
+    // Open Delete Deck Modal Screen
     function open() {
       setOpenModal(true);
     };
 
+    // Return to Decks
+    function back() {
+      setStudying(false)
+    };
+
+    // Needed for deletion as without a delay not everything happens before page reload
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    };
+
+    // Grab the Deck Document ID using the name of the Current Deck, Delete it, then wait and reload page
+    const deleteDeck = async (e) => {
+      const currentDoc = query(decksRef2, where('name', '==', currentDeck));
+      const querySnapshot = await getDocs(currentDoc);
+      querySnapshot.forEach((docu) => {
+        deleteDoc(doc(firestore, 'decks', docu.id));
+      });
+      console.log({currentDeck});
+      await delay(300);
+      window.location.reload(false);
+  };
+
   return (
     <div className='page'>
+          {studying}
         <h1>{currentDeck}</h1>
+        <button onClick={back}>Decks</button>
+        <button onClick={deleteDeck}>Delete Deck</button>
         <div className='Cardsbuttons'>
             <button onClick={open}>Add Card</button>
             <button>Study</button>

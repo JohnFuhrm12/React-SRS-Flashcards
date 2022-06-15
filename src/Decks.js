@@ -49,9 +49,8 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     }
 
     function study(e) {
-        setStudying('true');
+        setStudying(true);
         setCurrentDeck(e.target.innerText);
-      
     };
 
     function handleChange(e) {
@@ -62,23 +61,14 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   return (
     <div className='page'>
       <h1 className='title'>React SRS Flashcards</h1>
-      {newDeckName}
       <form onSubmit={createDeck}>
-          <textarea value={newDeckName} onChange={handleChange} required/>
+          <input value={newDeckName} onChange={handleChange} required/>
           <button>Create Deck</button>
       </form>
       {decks.map((deck) => {
           return (
             <div className='decks'>
               <button onClick={study}>{deck.name}</button>
-                <button>Delete</button>
-            </div>
-          )
-        })}
-        {cards.map((card) => {
-          return (
-            <div>
-                {card.front}
             </div>
           )
         })}
