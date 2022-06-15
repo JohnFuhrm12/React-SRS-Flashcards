@@ -29,6 +29,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const decksRef = firestore.collection('decks');
 
   const [showingCards, setShowingCards] = useState(false);
+  const [response, setResponse] = useState(false);
 
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(firestore, "decks");
@@ -93,6 +94,14 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setShowingCards(true);
   };
 
+  function handleResponse() {
+    setResponse(true);
+  }
+
+  function handleAnswer() {
+    setResponse(false);
+  }
+
   return (
     <div className='page'>
         <button onClick={test}>Test</button>
@@ -113,6 +122,18 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
+        <div>THIS IS A SPACE</div>
+        {showingCards ? <><div>{cards[0].front}</div>
+        <div className='responses'>
+        {response===true ? <>
+            <button onClick={handleAnswer}>Again</button>
+            <button onClick={handleAnswer}>Easy</button>
+            <button onClick={handleAnswer}>Normal</button>
+            <button onClick={handleAnswer}>Hard</button></> : <>
+            <button onClick={handleResponse}>Show Response</button>
+            </>}
+          </div></>
+        : <div></div>}
     </div>
   );
 }
