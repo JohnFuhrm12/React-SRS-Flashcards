@@ -28,7 +28,7 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef);
+      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef.orderBy('createdAt', "asc"));

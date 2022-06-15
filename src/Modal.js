@@ -31,7 +31,7 @@ const Modal = ({ closeModal, currentDeck }) => {
 
     useEffect(() => {
         const getDbmessages = async () => {
-          const cards = await getDocs(cardsRef);
+          const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
           setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     
           const decks = await getDocs(decksRef.orderBy('createdAt', "asc"));
@@ -48,6 +48,7 @@ const Modal = ({ closeModal, currentDeck }) => {
             front: newCardFront,
             back: newCardBack,
             deck: currentDeck,
+            status: 'NewCard',
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         window.location.reload(false);

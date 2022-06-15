@@ -28,16 +28,34 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const cardsRef = firestore.collection('cards');
   const decksRef = firestore.collection('decks');
 
+  const [showingCards, setShowingCards] = useState(false);
+
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(firestore, "decks");
+  const cardsRef2 = collection(firestore, "cards")
+
+  const test = async (e) => {
+    const currentCards = query(collection(firestore, "cards"), where("deck", "==", currentDeck));
+    const querySnapshotList = await getDocs(currentCards);
+
+    querySnapshotList.forEach((doc) => {
+      console.log(doc.data());
+      
+    });
+
+    console.log(cards);
+    console.log(cards[0]);
+  };
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef);
+      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef);
       setDecks(decks.docs.reverse().map((doc) => ({ ...doc.data(), id: doc.id})));
+
+      test();
     };
 
     getDbmessages();
@@ -71,19 +89,23 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       window.location.reload(false);
   };
 
+  function showCards() {
+    setShowingCards(true);
+  };
+
   return (
     <div className='page'>
-          {studying}
+        <button onClick={test}>Test</button>
         <h1>{currentDeck}</h1>
         <button onClick={back}>Decks</button>
         <button onClick={deleteDeck}>Delete Deck</button>
         <div className='Cardsbuttons'>
             <button onClick={open}>Add Card</button>
-            <button>Study</button>
+            <button onClick={showCards}>Study</button>
         </div>
         {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck}/>}
         {cards.map((card) => {
-          if (card.deck === currentDeck) {
+          if (card.deck === currentDeck && showingCards === true) {
             return (
               <div>
                   {card.front}
