@@ -7,7 +7,7 @@ import Modal from './Modal';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { collection, doc, deleteDoc, getDocs, query, where, getFirestore } from "firebase/firestore";
+import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -33,7 +33,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(firestore, "decks");
-  const cardsRef2 = collection(firestore, "cards")
+  const cardsRef2 = collection(firestore, "cards");
+
+  const currentCardRef = doc(firestore, 'cards', 'selectedCard');
 
   const test = async (e) => {
     const currentCards = query(collection(firestore, "cards"), where("deck", "==", currentDeck));
@@ -50,7 +52,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
+      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc").limit(20));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef);
@@ -96,11 +98,20 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   function handleResponse() {
     setResponse(true);
-  }
+  };
 
   function handleAnswer() {
     setResponse(false);
-  }
+  };
+
+  const handleAnswerEasy = async (e) => {
+    setResponse(false);
+
+    await setDoc(doc(firestore, "cards", cards[0].id), {
+      status: "ReviewCard",
+    }, { merge: true });
+
+  };
 
   return (
     <div className='page'>
@@ -127,7 +138,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         <div className='responses'>
         {response===true ? <>
             <button onClick={handleAnswer}>Again</button>
-            <button onClick={handleAnswer}>Easy</button>
+            <button onClick={handleAnswerEasy}>Easy</button>
             <button onClick={handleAnswer}>Normal</button>
             <button onClick={handleAnswer}>Hard</button></> : <>
             <button onClick={handleResponse}>Show Response</button>
