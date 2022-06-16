@@ -7,7 +7,7 @@ import Modal from './Modal';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore } from "firebase/firestore";
+import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -31,6 +31,8 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [showingCards, setShowingCards] = useState(false);
   const [response, setResponse] = useState(false);
 
+  const [newCards, setNewCards] = useState([]);
+
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(firestore, "decks");
   const cardsRef2 = collection(firestore, "cards");
@@ -38,27 +40,22 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const currentCardRef = doc(firestore, 'cards', 'selectedCard');
 
   const test = async (e) => {
-    const currentCards = query(collection(firestore, "cards"), where("deck", "==", currentDeck));
-    const querySnapshotList = await getDocs(currentCards);
-
-    querySnapshotList.forEach((doc) => {
-      console.log(doc.data());
-      
-    });
-
-    console.log(cards);
-    console.log(cards[0]);
+    //console.log(cards);
+    //console.log(cards[0]);
+    console.log(newCards);
   };
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc").limit(20));
+      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef);
       setDecks(decks.docs.reverse().map((doc) => ({ ...doc.data(), id: doc.id})));
 
-      test();
+      const newCardsRef = query(cardsRef2, where('status', '==', 'NewCard'), limit(20));
+      const querySnapshot = await getDocs(newCardsRef);
+      setNewCards(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     };
 
     getDbmessages();
@@ -125,6 +122,16 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         </div>
         {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck}/>}
         {cards.map((card) => {
+          if (card.deck === currentDeck && showingCards === true) {
+            return (
+              <div>
+                  {card.front}
+              </div>
+            )
+          }
+        })}
+        <div>THIS IS A SPACE</div>
+        {newCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
               <div>
