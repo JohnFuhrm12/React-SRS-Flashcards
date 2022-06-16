@@ -32,6 +32,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [response, setResponse] = useState(false);
 
   const [newCards, setNewCards] = useState([]);
+  const [reviewCards, setReviewCards] = useState([]);
 
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(firestore, "decks");
@@ -56,6 +57,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       const newCardsRef = query(cardsRef2, where('status', '==', 'NewCard'), limit(20));
       const querySnapshot = await getDocs(newCardsRef);
       setNewCards(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
+
+      const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), limit(50));
+      const querySnapshot2 = await getDocs(reviewCardsRef);
+      setReviewCards(querySnapshot2.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     };
 
     getDbmessages();
@@ -132,6 +137,16 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         })}
         <div>THIS IS A SPACE</div>
         {newCards.map((card) => {
+          if (card.deck === currentDeck && showingCards === true) {
+            return (
+              <div>
+                  {card.front}
+              </div>
+            )
+          }
+        })}
+        <div>THIS IS A SPACE</div>
+        {reviewCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
               <div>
