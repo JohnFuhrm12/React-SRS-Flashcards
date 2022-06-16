@@ -56,11 +56,11 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       const decks = await getDocs(decksRef);
       setDecks(decks.docs.reverse().map((doc) => ({ ...doc.data(), id: doc.id})));
 
-      const newCardsRef = query(cardsRef2, where('status', '==', 'NewCard'), limit(20));
+      const newCardsRef = query(cardsRef2, where('status', '==', 'NewCard'), where('deck', '==', currentDeck), limit(20));
       const querySnapshot = await getDocs(newCardsRef);
       setNewCards(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
-      const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), limit(50));
+      const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), where('deck', '==', currentDeck), limit(50));
       const querySnapshot2 = await getDocs(reviewCardsRef);
       setReviewCards(querySnapshot2.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     };
@@ -128,6 +128,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             <button onClick={showCards}>Study</button>
         </div>
         {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck}/>}
+        <h1>All Cards:</h1>
         {cards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
@@ -137,7 +138,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
-        <div>THIS IS A SPACE</div>
+        <h1>New Cards:</h1>
         {newCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
@@ -147,7 +148,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
-        <div>THIS IS A SPACE</div>
+        <h1>Review Cards:</h1>
         {reviewCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
@@ -157,7 +158,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
-        <div>THIS IS A SPACE</div>
+        <h1>Current Card:</h1>
         {showingCards ? <><div>{newCards[0].front}</div>
         <div className='responses'>
         {response===true ? <>
