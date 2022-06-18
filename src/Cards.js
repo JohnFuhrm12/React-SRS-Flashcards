@@ -89,6 +89,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
     }, []);
 
+    useEffect(() => {
+      DoCardsExist();
+    });
+
     // Open Delete Deck Modal Screen
     function open() {
       setOpenModal(true);
@@ -117,11 +121,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   };
 
   function showCards() {
-    DoCardsExist();
     if (cardsExist === true && newCardsExist === true) {
       setShowingCards(true);
-    };
-    if (cardsExist === false && newCardsExist === false) {
+    } else {
       alert('No Cards to Study!');
     };
   };
