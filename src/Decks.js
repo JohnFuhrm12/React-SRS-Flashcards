@@ -9,12 +9,12 @@ import { getDoc, getDocs } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
-  apiKey: "AIzaSyBVSnlgAoDHxbP5B9jcsmC_93nVZmcQZzc",
-  authDomain: "react-srs-app.firebaseapp.com",
-  projectId: "react-srs-app",
-  storageBucket: "react-srs-app.appspot.com",
-  messagingSenderId: "1006641704931",
-  appId: "1:1006641704931:web:cf116096615ece91c73ad6"
+  apiKey: "AIzaSyD7VLFnmHPZlaApmf21EfsNXnYbM-SPhYw",
+  authDomain: "react-srs-app-b4511.firebaseapp.com",
+  projectId: "react-srs-app-b4511",
+  storageBucket: "react-srs-app-b4511.appspot.com",
+  messagingSenderId: "369393619126",
+  appId: "1:369393619126:web:7889db4611da2724bb9617"
 })
 
 const firestore = firebase.firestore();
