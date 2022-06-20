@@ -29,12 +29,14 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages }) => {
     const cardsRef = db.collection('cards');
     const decksRef = db.collection('decks');
 
+    let today = new Date().toLocaleDateString();
+
     useEffect(() => {
         const getDbmessages = async () => {
-          const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
+          const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
           setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     
-          const decks = await getDocs(decksRef.orderBy('createdAt', "asc"));
+          const decks = await getDocs(decksRef.orderBy('dateTime', "asc"));
           setDecks(decks.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
         };
     
@@ -49,7 +51,8 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages }) => {
             back: newCardBack,
             deck: currentDeck,
             status: 'NewCard',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            interval: 0,
+            dateTime: today,
         });
 
         setNewCardFront('');
@@ -90,7 +93,6 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages }) => {
                 </form>
             </div>
         </div>
-        
         </>
     )
 }

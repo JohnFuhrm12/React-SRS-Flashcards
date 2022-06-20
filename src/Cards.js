@@ -38,6 +38,13 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   let cardsLength = cards.length;
   let newCardsLength = newCards.length;
+  let reviewCardsLength = reviewCards.length;
+
+  let today = new Date().toLocaleDateString();
+
+  const currentMonth = Number(today.split(/[/]/)[0]);
+  const currentDay = Number(today.split(/[/]/)[1]);
+  const currentYear = Number(today.split(/[/]/)[2]);
 
   // Need a new reference to work correctly with deletion
   const decksRef2 = collection(db, "decks");
@@ -50,10 +57,15 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     console.log("First Card:", cards[0]);
     console.log("New Cards:", newCards);
     console.log("Review Cards:", reviewCards);
+    getDateTime();
+    console.log(today);
+    console.log("Month:", currentMonth);
+    console.log("Day:", currentDay);
+    console.log("Year:", currentYear);
   };
 
   const getDbmessages = async () => {
-    const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
+    const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
     setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
     const decks = await getDocs(decksRef);
@@ -63,14 +75,14 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     const querySnapshot = await getDocs(newCardsRef);
     setNewCards(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
-    const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), where('deck', '==', currentDeck), limit(50));
+    const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), where('deck', '==', currentDeck), where('dateTime', '==', today), limit(50));
     const querySnapshot2 = await getDocs(reviewCardsRef);
     setReviewCards(querySnapshot2.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
   };
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
+      const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef);
@@ -80,18 +92,29 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       const querySnapshot = await getDocs(newCardsRef);
       setNewCards(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
-      const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), where('deck', '==', currentDeck), limit(50));
+      const reviewCardsRef = query(cardsRef2, where('status', '==', 'ReviewCard'), where('deck', '==', currentDeck), where('dateTime', '==', today), limit(50));
       const querySnapshot2 = await getDocs(reviewCardsRef);
       setReviewCards(querySnapshot2.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     };
 
     getDbmessages();
+    getDateTime();
 
     }, []);
 
     useEffect(() => {
       DoCardsExist();
     });
+
+    const getDateTime = async (e) => {
+      const allNew = query(cardsRef2, where('status', '==', 'NewCard'));
+      const newSnapshot = await getDocs(allNew);
+      newSnapshot.forEach((docu) => {
+        setDoc(doc(db, "cards", docu.id), {
+          dateTime: today,
+        }, { merge: true });
+      });
+    };
 
     // Open Delete Deck Modal Screen
     function open() {
@@ -121,7 +144,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   };
 
   function showCards() {
-    if (cardsExist === true && newCardsExist === true) {
+    if (cardsExist === true) {
       setShowingCards(true);
     } else {
       alert('No Cards to Study!');
@@ -140,7 +163,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
       status: "ReviewCard",
+      dateTime: `${currentMonth}/${currentDay + 3}/${currentYear}`,
     }, { merge: true });
 
     getDbmessages();
@@ -150,7 +175,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
       status: "ReviewCard",
+      dateTime: `${currentMonth}/${currentDay + 2}/${currentYear}`,
     }, { merge: true });
 
     getDbmessages();
@@ -160,7 +187,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
       status: "ReviewCard",
+      dateTime: `${currentMonth}/${currentDay + 1}/${currentYear}`,
     }, { merge: true });
 
     getDbmessages();
@@ -196,7 +225,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
-        <h1>New Cards:</h1>
+        <h1>New Cards ({newCardsLength}):</h1>
         {newCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
@@ -206,7 +235,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             )
           }
         })}
-        <h1>Review Cards:</h1>
+        <h1>Review Cards ({reviewCardsLength}):</h1>
         {reviewCards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
             return (
@@ -217,14 +246,26 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
           }
         })}
         <h1>Current Card:</h1>
-        {showingCards ? <><div>{newCards[0].front}</div>
+        {showingCards && newCardsLength > 0 ? <><div>{newCards[0].front}</div>
         <div className='responses'>
         {response===true ? <>
             <div>{newCards[0].back}</div>
             <button onClick={handleAnswer}>Again</button>
-            <button onClick={handleAnswerEasy}>Easy</button>
+            <button onClick={handleAnswerHard}>Hard</button>
             <button onClick={handleAnswerNormal}>Normal</button>
-            <button onClick={handleAnswerHard}>Hard</button></> : <>
+            <button onClick={handleAnswerEasy}>Easy</button></> : <>
+            <button onClick={handleResponse}>Show Response</button>
+            </>}
+          </div></>
+        : <div></div>}
+        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <><div>{reviewCards[0].front}</div>
+        <div className='responses'>
+        {response===true ? <>
+            <div>{reviewCards[0].back}</div>
+            <button onClick={handleAnswer}>Again</button>
+            <button onClick={handleAnswerHard}>Hard</button>
+            <button onClick={handleAnswerNormal}>Normal</button>
+            <button onClick={handleAnswerEasy}>Easy</button></> : <>
             <button onClick={handleResponse}>Show Response</button>
             </>}
           </div></>
