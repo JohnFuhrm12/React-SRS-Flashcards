@@ -63,7 +63,7 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       <h1 className='title'>React SRS Flashcards</h1>
       <form onSubmit={createDeck}>
           <input className='createInput' value={newDeckName} onChange={handleChange} placeholder='Deck Name...' required/>
-          <button>Create Deck</button>
+          <button className='createButton'>Create Deck</button>
       </form>
       <h2 className='decksTitle'>Your Decks:</h2>
       <div className='decksContainer'>

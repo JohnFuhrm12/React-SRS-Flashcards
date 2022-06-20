@@ -37,22 +37,24 @@ html, body {
     border: solid 4px aqua;
     border-radius: 15px;
     background-color: gray;
+    transition: 0.3s;
 }
 
 .deckButton:hover {
     background-color: rgb(66, 64, 64);
     color: rgb(3, 187, 187);
+    transition: 0.3s;
 }
 
 .createInput {
     width: 200px;
     height: 20px;
     font-size: 20px;
-    padding: 5px;
+    padding: 10px;
     border: solid 4px aqua;
     border-radius: 15px;
     margin-right: 20px;
-    background-color: rgb(66, 64, 64);
+    background-color: rgb(66, 64, 64);;
     color: aqua;
 }
 
@@ -64,6 +66,25 @@ html, body {
     font-size: 40px;
 }
 
+.createButton {
+    font-size: 18px;
+    padding: 10px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    background-color: rgb(66, 64, 64);
+    color: aqua;
+    transition: 0.3s;
+}
+
+.createButton:hover {
+    font-size: 18px;
+    padding: 10px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    background-color: gray;
+    color: aqua;
+    transition: 0.3s;
+}
 
 
 /* Decks */
