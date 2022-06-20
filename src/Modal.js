@@ -77,11 +77,12 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
         <>
         <div className="modalBackground">
             <div className="modalContainer">
-                <button onClick={close}> X </button>
                 <div className="modalTitle">
-                    <h1>Add Card</h1>
+                    <h1>Add Card:</h1>
+                    <div className='x-button'><button className='closeButton' onClick={close}> X </button></div>
                 </div>
                 <form onSubmit={createCard}>
+                <div className='modalInputs'>
                     <label>
                         Front:
                         <input value={newCardFront} onChange={handleChangeFront} required/>
@@ -90,7 +91,8 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
                         Back:
                         <input value={newCardBack} onChange={handleChangeBack} required/>
                     </label>
-                    <button>Add Card</button>
+                </div>
+                    <button className='addButton'>Add Card</button>
                 </form>
             </div>
         </div>

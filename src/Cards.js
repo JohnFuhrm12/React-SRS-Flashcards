@@ -56,20 +56,6 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   const currentCardRef = doc(db, 'cards', 'selectedCard');
 
-  const test = async (e) => {
-    console.log("All Cards:", cards);
-    console.log("First Card:", cards[0]);
-    console.log("New Cards:", newCards);
-    console.log("Review Cards:", reviewCards);
-    getDateTime();
-    console.log(today);
-    console.log("Month:", currentMonth);
-    console.log("Day:", currentDay);
-    console.log("Year:", currentYear);
-    console.log("Failure:", failure);
-    console.log(cardsLength);
-  };
-
   const getDbmessages = async () => {
     const currentCardsRef = query(cardsRef2, where('deck', '==', currentDeck));
     const currentQuerySnapshot = await getDocs(currentCardsRef);
@@ -167,6 +153,12 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     if (cardsExist === false) {
       alert('No Cards to Study!');
     };
+    if (finish === true && cardsExist === true) {
+      alert('You have finished studying for today! Come back tomorrow!');
+    };
+    if (showingCards === true) {
+      setShowingCards(false);
+    }
   };
 
   function handleResponse() {
@@ -285,67 +277,48 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   };
 
   return (
+    <>
     <div className='page'>
-        <button onClick={test}>Test</button>
+    {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
         <h1>{currentDeck}</h1>
+        <div>
+
+
+        </div>
         <button onClick={back}>Decks</button>
         <button onClick={deleteDeck}>Delete Deck</button>
         <div className='Cardsbuttons'>
             <button onClick={open}>Add Card</button>
             <button onClick={showCards}>Study</button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
-        <h1>All Cards:</h1>
-        {cards.map((card) => {
-          if (card.deck === currentDeck && showingCards === true) {
-            return (
-              <div>
-                  {card.front}
-              </div>
-            )
-          }
-        })}
-        <h1>New Cards ({newCardsLength}):</h1>
-        {newCards.map((card) => {
-          if (card.deck === currentDeck && showingCards === true) {
-            return (
-              <div>
-                  {card.front}
-              </div>
-            )
-          }
-        })}
-        <h1>Review Cards ({reviewCardsLength}):</h1>
-        {reviewCards.map((card) => {
-          if (card.deck === currentDeck && showingCards === true) {
-            return (
-              <div>
-                  {card.front}
-              </div>
-            )
-          }
-        })}
-        <h1>Current Card:</h1>
-        {showingCards && newCardsLength > 0 ? <>{failure && newCardsLength > 1 ? <div>{newCards[1].front}</div> : <div>{newCards[0].front}</div>}
+        {showingCards && newCardsLength > 0 ? <>{failure && newCardsLength > 1 ? <h1>{newCards[1].front}</h1> : <h1>{newCards[0].front}</h1>}
         <div className='responses'>
         {response===true ? <>
-            {failure && newCardsLength > 1 ? <div>{newCards[1].back}</div> : <div>{newCards[0].back}</div>}
+            {failure && newCardsLength > 1 ? <h1>{newCards[1].back}</h1> : <h1>{newCards[0].back}</h1>}
             <button onClick={handleAnswerAgainNew}>Again</button>
             <button onClick={handleAnswerHard}>Hard</button>
             <button onClick={handleAnswerNormal}>Normal</button>
             <button onClick={handleAnswerEasy}>Easy</button></> : <>
+            <div className='card-counters'>
+              <p>{newCardsLength}</p>
+              <p>{reviewCardsLength}</p>
+            </div>
             <button onClick={handleResponse}>Show Response</button>
             </>}
           </div></>
         : <div></div>}
-        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure && reviewCardsLength > 1 ? <div>{reviewCards[1].front}</div> : <div>{reviewCards[0].front}</div>}
+        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure && reviewCardsLength > 1 ? <h1>{reviewCards[1].front}</h1> : <h1>{reviewCards[0].front}</h1>}
         <div className='responses'>
         {response===true ? <>
-            {failure && reviewCardsLength > 1 ? <div>{reviewCards[1].back}</div> : <div>{reviewCards[0].back}</div>}
+            {failure && reviewCardsLength > 1 ? <h1>{reviewCards[1].back}</h1> : <h1>{reviewCards[0].back}</h1>}
             <button onClick={handleAnswerAgainReview}>Again</button>
             <button onClick={handleAnswerHardReview}>Hard</button>
             <button onClick={handleAnswerNormalReview}>Normal</button>
             <button onClick={handleAnswerEasyReview}>Easy</button></> : <>
+            <div className='card-counters'>
+              <p>{newCardsLength}</p>
+              <p>{reviewCardsLength}</p>
+            </div>
             <button onClick={handleResponse}>Show Response</button>
             </>}
           </div></>
@@ -353,6 +326,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         {finish && cardsLength > 0 ? <div>You have finished studying for today! Come back tomorrow!</div> : <></>}
         {cardsLength === 0 ? <div>No cards in this deck yet.</div> : <></>}
     </div>
+    </>
   );
 }
 

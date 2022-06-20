@@ -5,7 +5,7 @@ import React, {useState, useEffect, useRef} from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -17,14 +17,14 @@ firebase.initializeApp({
   appId: "1:369393619126:web:7889db4611da2724bb9617"
 })
 
-const firestore = firebase.firestore();
+const db = firebase.firestore();
 
 const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
   const [newDeckName, setNewDeckName] = useState("");
-  const cardsRef = firestore.collection('cards');
-  const decksRef = firestore.collection('decks');
+  const cardsRef = db.collection('cards');
+  const decksRef = db.collection('decks');
 
   useEffect(() => {
     const getDbmessages = async () => {
@@ -62,16 +62,19 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     <div className='page'>
       <h1 className='title'>React SRS Flashcards</h1>
       <form onSubmit={createDeck}>
-          <input value={newDeckName} onChange={handleChange} required/>
+          <input className='createInput' value={newDeckName} onChange={handleChange} placeholder='Deck Name...' required/>
           <button>Create Deck</button>
       </form>
+      <h2 className='decksTitle'>Your Decks:</h2>
+      <div className='decksContainer'>
       {decks.map((deck) => {
           return (
-            <div className='decks'>
-              <button onClick={study}>{deck.name}</button>
+            <div className='deck'>
+              <button className='deckButton' onClick={study}>{deck.name}</button>
             </div>
           )
         })}
+      </div>
     </div>
   );
 }

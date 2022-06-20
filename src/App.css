@@ -1,3 +1,4 @@
+/* Initial Setup */
 html, body {
     background-color: black;
 }
@@ -11,6 +12,166 @@ html, body {
     font-size: 60px;
 }
 
-.decks {
+/* Initial Setup */
+
+
+
+/* Decks */
+
+.decksContainer {
+    margin-top: 40px;
+    align-items: center;
+}
+
+.deck {
+    margin: 0 auto;
+    margin: 20px;
+}
+
+.deckButton {
+    width: 250px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    padding: 5px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    background-color: gray;
+}
+
+.deckButton:hover {
+    background-color: rgb(66, 64, 64);
+    color: rgb(3, 187, 187);
+}
+
+.createInput {
+    width: 200px;
+    height: 20px;
+    font-size: 20px;
+    padding: 5px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    margin-right: 20px;
+    background-color: rgb(66, 64, 64);
+    color: aqua;
+}
+
+::placeholder {
+    color: aqua;
+}
+
+.decksTitle {
     font-size: 40px;
 }
+
+
+
+/* Decks */
+
+
+
+
+
+
+/* Modal */
+
+.modalBackground {
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    align-items: center;
+    text-align: center;
+}
+
+.modalTitle {
+    display: flex;
+    flex-direction: column-reverse;
+    font-size: 30px;
+}
+
+.modalTitle h1 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.modalContainer {
+    background-color: gray;
+    width: 40%;
+    margin: 0 auto;
+    border-color: aqua;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 20px;
+    margin-top: 120px;
+}
+
+.x-button {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 40px;
+    border-bottom: solid 4px;
+    background-color: rgb(43, 40, 40);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+};
+
+.modalTitle button {
+    height: 40px;
+    width: 50px;
+}
+
+.closeButton {
+    height: 40px;
+    width: 80px;
+    border-top-right-radius: 15px;
+    border-color: rgb(13, 144, 144);
+    border-width: 6px;
+    background-color: white;
+    transition: 0.5s;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.modalTitle button:hover {
+    background-color: rgb(217, 16, 16);
+    transition: 0.5s;
+}
+
+.modalInputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.modalInputs input {
+    margin: 10px;
+    height: 20px;
+    width: 200px;
+    font-size: 20px;
+    border-style: solid;
+    border-color: black;
+    border-width: 4px;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.modalInputs label {
+    font-size: 30px;
+}
+
+.addButton {
+    width: 130px;
+    height: 50px;
+    margin: 20px;
+    font-size: 20px;
+    border: solid 4px aqua;
+    border-radius: 20px;
+    transition: 0.5s;
+}
+
+.addButton:hover {
+    background-color: rgb(80, 79, 79);
+    transition: 0.5s;
+}
+
+/* Modal */
