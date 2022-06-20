@@ -30,6 +30,8 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const cardsRef = db.collection('cards');
   const decksRef = db.collection('decks');
 
+  const [failure, setFailure] = useState(false);
+
   const [showingCards, setShowingCards] = useState(false);
   const [response, setResponse] = useState(false);
 
@@ -62,6 +64,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     console.log("Month:", currentMonth);
     console.log("Day:", currentDay);
     console.log("Year:", currentYear);
+    console.log("Failure:", failure);
   };
 
   const getDbmessages = async () => {
@@ -155,12 +158,20 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(true);
   };
 
-  function handleAnswer() {
+  function handleAnswerAgainNew() {
     setResponse(false);
+    if (failure === true) {
+      setFailure(false);
+    } else {
+      setFailure(true);
+    };
+
+    getDbmessages();
   };
 
   const handleAnswerEasy = async (e) => {
     setResponse(false);
+    setFailure(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
       interval: firebase.firestore.FieldValue.increment(1),
@@ -173,6 +184,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   const handleAnswerNormal = async (e) => {
     setResponse(false);
+    setFailure(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
       interval: firebase.firestore.FieldValue.increment(1),
@@ -185,6 +197,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   const handleAnswerHard = async (e) => {
     setResponse(false);
+    setFailure(false);
 
     await setDoc(doc(db, "cards", newCards[0].id), {
       interval: firebase.firestore.FieldValue.increment(1),
@@ -204,6 +217,58 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     };
   };
 
+  const handleAnswerAgainReview = async (e) => {
+    setResponse(false);
+    if (failure === true) {
+      setFailure(false);
+    } else {
+      setFailure(true);
+    };
+
+    await setDoc(doc(db, "cards", reviewCards[0].id), {
+      interval: 0,
+      dateTime: today,
+    }, { merge: true });
+
+    getDbmessages();
+  };
+
+  const handleAnswerEasyReview = async (e) => {
+    setResponse(false);
+    setFailure(false);
+
+    await setDoc(doc(db, "cards", reviewCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
+      dateTime: `${currentMonth}/${currentDay + 20}/${currentYear}`,
+    }, { merge: true });
+
+    getDbmessages();
+  };
+
+  const handleAnswerNormalReview = async (e) => {
+    setResponse(false);
+    setFailure(false);
+
+    await setDoc(doc(db, "cards", reviewCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
+      dateTime: `${currentMonth}/${currentDay + 10}/${currentYear}`,
+    }, { merge: true });
+
+    getDbmessages();
+  };
+
+  const handleAnswerHardReview = async (e) => {
+    setResponse(false);
+    setFailure(false);
+
+    await setDoc(doc(db, "cards", reviewCards[0].id), {
+      interval: firebase.firestore.FieldValue.increment(1),
+      dateTime: `${currentMonth}/${currentDay + 5}/${currentYear}`,
+    }, { merge: true });
+
+    getDbmessages();
+  };
+
   return (
     <div className='page'>
         <button onClick={test}>Test</button>
@@ -214,7 +279,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             <button onClick={open}>Add Card</button>
             <button onClick={showCards}>Study</button>
         </div>
-        {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages}/>}
+        {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
         <h1>All Cards:</h1>
         {cards.map((card) => {
           if (card.deck === currentDeck && showingCards === true) {
@@ -246,11 +311,11 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
           }
         })}
         <h1>Current Card:</h1>
-        {showingCards && newCardsLength > 0 ? <><div>{newCards[0].front}</div>
+        {showingCards && newCardsLength > 0 ? <>{failure ? <div>{newCards[1].front}</div> : <div>{newCards[0].front}</div>}
         <div className='responses'>
         {response===true ? <>
-            <div>{newCards[0].back}</div>
-            <button onClick={handleAnswer}>Again</button>
+            {failure ? <div>{newCards[1].back}</div> : <div>{newCards[0].back}</div>}
+            <button onClick={handleAnswerAgainNew}>Again</button>
             <button onClick={handleAnswerHard}>Hard</button>
             <button onClick={handleAnswerNormal}>Normal</button>
             <button onClick={handleAnswerEasy}>Easy</button></> : <>
@@ -258,14 +323,14 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             </>}
           </div></>
         : <div></div>}
-        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <><div>{reviewCards[0].front}</div>
+        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure ? <div>{reviewCards[1].front}</div> : <div>{reviewCards[0].front}</div>}
         <div className='responses'>
         {response===true ? <>
-            <div>{reviewCards[0].back}</div>
-            <button onClick={handleAnswer}>Again</button>
-            <button onClick={handleAnswerHard}>Hard</button>
-            <button onClick={handleAnswerNormal}>Normal</button>
-            <button onClick={handleAnswerEasy}>Easy</button></> : <>
+            {failure ? <div>{reviewCards[1].back}</div> : <div>{reviewCards[0].back}</div>}
+            <button onClick={handleAnswerAgainReview}>Again</button>
+            <button onClick={handleAnswerHardReview}>Hard</button>
+            <button onClick={handleAnswerNormalReview}>Normal</button>
+            <button onClick={handleAnswerEasyReview}>Easy</button></> : <>
             <button onClick={handleResponse}>Show Response</button>
             </>}
           </div></>

@@ -19,7 +19,7 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages }) => {
+const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure }) => {
     const [newCardFront, setNewCardFront] = useState("");
     const [newCardBack, setNewCardBack] = useState("");
 
@@ -41,6 +41,7 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages }) => {
         };
     
         getDbmessages();
+        setFailure(false);
     
         }, [])
 
