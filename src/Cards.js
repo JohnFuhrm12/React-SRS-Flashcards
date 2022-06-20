@@ -38,6 +38,8 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [newCards, setNewCards] = useState([]);
   const [reviewCards, setReviewCards] = useState([]);
 
+  const [finish, setFinish] = useState(false);
+
   let cardsLength = cards.length;
   let newCardsLength = newCards.length;
   let reviewCardsLength = reviewCards.length;
@@ -65,11 +67,13 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     console.log("Day:", currentDay);
     console.log("Year:", currentYear);
     console.log("Failure:", failure);
+    console.log(cardsLength);
   };
 
   const getDbmessages = async () => {
-    const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
-    setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
+    const currentCardsRef = query(cardsRef2, where('deck', '==', currentDeck));
+    const currentQuerySnapshot = await getDocs(currentCardsRef);
+    setCards(currentQuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
     const decks = await getDocs(decksRef);
     setDecks(decks.docs.reverse().map((doc) => ({ ...doc.data(), id: doc.id})));
@@ -85,8 +89,9 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
   useEffect(() => {
     const getDbmessages = async () => {
-      const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
-      setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
+      const currentCardsRef = query(cardsRef2, where('deck', '==', currentDeck));
+      const currentQuerySnapshot = await getDocs(currentCardsRef);
+      setCards(currentQuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
       const decks = await getDocs(decksRef);
       setDecks(decks.docs.reverse().map((doc) => ({ ...doc.data(), id: doc.id})));
@@ -107,7 +112,16 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
     useEffect(() => {
       DoCardsExist();
+      FinishSession();
     });
+
+    function FinishSession() {
+      if (newCardsLength === 0 && reviewCardsLength === 0) {
+        setFinish(true);
+      } else {
+        setFinish(false);
+      };
+    };
 
     const getDateTime = async (e) => {
       const allNew = query(cardsRef2, where('status', '==', 'NewCard'));
@@ -147,9 +161,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   };
 
   function showCards() {
-    if (cardsExist === true) {
+    if (cardsExist === true && finish === false) {
       setShowingCards(true);
-    } else {
+    };
+    if (cardsExist === false) {
       alert('No Cards to Study!');
     };
   };
@@ -311,10 +326,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
           }
         })}
         <h1>Current Card:</h1>
-        {showingCards && newCardsLength > 0 ? <>{failure ? <div>{newCards[1].front}</div> : <div>{newCards[0].front}</div>}
+        {showingCards && newCardsLength > 0 ? <>{failure && newCardsLength > 1 ? <div>{newCards[1].front}</div> : <div>{newCards[0].front}</div>}
         <div className='responses'>
         {response===true ? <>
-            {failure ? <div>{newCards[1].back}</div> : <div>{newCards[0].back}</div>}
+            {failure && newCardsLength > 1 ? <div>{newCards[1].back}</div> : <div>{newCards[0].back}</div>}
             <button onClick={handleAnswerAgainNew}>Again</button>
             <button onClick={handleAnswerHard}>Hard</button>
             <button onClick={handleAnswerNormal}>Normal</button>
@@ -323,10 +338,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             </>}
           </div></>
         : <div></div>}
-        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure ? <div>{reviewCards[1].front}</div> : <div>{reviewCards[0].front}</div>}
+        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure && reviewCardsLength > 1 ? <div>{reviewCards[1].front}</div> : <div>{reviewCards[0].front}</div>}
         <div className='responses'>
         {response===true ? <>
-            {failure ? <div>{reviewCards[1].back}</div> : <div>{reviewCards[0].back}</div>}
+            {failure && reviewCardsLength > 1 ? <div>{reviewCards[1].back}</div> : <div>{reviewCards[0].back}</div>}
             <button onClick={handleAnswerAgainReview}>Again</button>
             <button onClick={handleAnswerHardReview}>Hard</button>
             <button onClick={handleAnswerNormalReview}>Normal</button>
@@ -335,6 +350,8 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             </>}
           </div></>
         : <div></div>}
+        {finish && cardsLength > 0 ? <div>You have finished studying for today! Come back tomorrow!</div> : <></>}
+        {cardsLength === 0 ? <div>No cards in this deck yet.</div> : <></>}
     </div>
   );
 }
