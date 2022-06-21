@@ -103,6 +103,7 @@ html, body {
     height: 50px;
     margin-left: 20px;
     margin-top: 50px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
