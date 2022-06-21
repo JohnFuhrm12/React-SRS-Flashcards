@@ -244,10 +244,47 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
     setFailure(false);
 
-    await setDoc(doc(db, "cards", reviewCards[0].id), {
-      interval: firebase.firestore.FieldValue.increment(1),
-      dateTime: `${currentMonth}/${currentDay + 20}/${currentYear}`,
-    }, { merge: true });
+    if (reviewCards[0].interval === 1 && currentDay < 23) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 8}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 1 && currentDay >= 23) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 22}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay < 11) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 15}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay >= 11) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay -10}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 3) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval > 3) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 2}/${currentDay}/${currentYear}`,
+      }, { merge: true });
+    };
 
     getDbmessages();
   };
@@ -256,10 +293,54 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
     setFailure(false);
 
-    await setDoc(doc(db, "cards", reviewCards[0].id), {
-      interval: firebase.firestore.FieldValue.increment(1),
-      dateTime: `${currentMonth}/${currentDay + 10}/${currentYear}`,
-    }, { merge: true });
+    if (reviewCards[0].interval === 1 && currentDay < 26) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 5}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 1 && currentDay >= 26) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 25}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay < 21) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 10}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay >= 21) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 20}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 3 && currentDay < 11) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 20}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 3 && currentDay >= 11) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 10}/${currentYear}`,
+      }, { merge: true });
+    }
+
+    if (reviewCards[0].interval > 3) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay}/${currentYear}`,
+      }, { merge: true });
+    };
 
     getDbmessages();
   };
@@ -268,10 +349,61 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setResponse(false);
     setFailure(false);
 
-    await setDoc(doc(db, "cards", reviewCards[0].id), {
-      interval: firebase.firestore.FieldValue.increment(1),
-      dateTime: `${currentMonth}/${currentDay + 5}/${currentYear}`,
-    }, { merge: true });
+    if (reviewCards[0].interval === 1 && currentDay < 27) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 3}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 1 && currentDay >= 27) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 26}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay < 24) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 6}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 2 && currentDay >= 24) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 23}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 3 && currentDay < 17) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 12}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval === 3 && currentDay >= 17) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 16}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval > 3 && currentDay < 6) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth}/${currentDay + 24}/${currentYear}`,
+      }, { merge: true });
+    };
+
+    if (reviewCards[0].interval > 3 && currentDay >= 6) {
+      await setDoc(doc(db, "cards", reviewCards[0].id), {
+        interval: firebase.firestore.FieldValue.increment(1),
+        dateTime: `${currentMonth + 1}/${currentDay - 5}/${currentYear}`,
+      }, { merge: true });
+    };
 
     getDbmessages();
   };
@@ -329,8 +461,8 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
             </>}
           </div></>
         : <div></div>}
-        {finish && cardsLength > 0 ? <div>You have finished studying for today! Come back tomorrow!</div> : <></>}
-        {cardsLength === 0 ? <div>No cards in this deck yet.</div> : <></>}
+        {finish && cardsLength > 0 ? <p className='finishMessage'>You have finished studying for today! Come back tomorrow!</p> : <></>}
+        {cardsLength === 0 ? <p className='noCardsMessage'>No cards in this deck yet.</p> : <></>}
     </div>
     </>
   );

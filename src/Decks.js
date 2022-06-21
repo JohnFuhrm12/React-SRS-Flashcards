@@ -1,6 +1,9 @@
 import './App.css';
 import React, {useState, useEffect, useRef} from "react";
 
+import Login from './Login';
+import useLocalStorage from "./useLocalStorage";
+
 // Firebase imports
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -19,20 +22,24 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
+const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck, name, setName}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
   const [newDeckName, setNewDeckName] = useState("");
   const cardsRef = db.collection('cards');
   const decksRef = db.collection('decks');
 
+  const decksRef2 = collection(db, "decks");
+  const cardsRef2 = collection(db, "cards");
+
   useEffect(() => {
     const getDbmessages = async () => {
       const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
       setCards(cards.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
 
-      const decks = await getDocs(decksRef.orderBy('createdAt', "asc"));
-      setDecks(decks.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
+      const newDecksRef = query(decksRef2, where('user', '==', name), orderBy("createdAt", "asc"));
+      const querySnapshot = await getDocs(newDecksRef);
+      setDecks(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
     };
 
     getDbmessages();
@@ -43,6 +50,7 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         e.preventDefault();
         await decksRef.add({
             name: newDeckName,
+            user: name,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         window.location.reload(false);
@@ -57,10 +65,19 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
         setNewDeckName(e.target.value);
       };
 
+    // Refresh page on logout to fix needing to press button 2x bug
+    function handleLogout () {
+      setName('');
+      window.location.reload(false);
+      };
 
   return (
     <div className='page'>
-      <h1 className='title'>React SRS Flashcards</h1>
+      {name==='' || name == null ? <Login onNameSubmit={setName} /> : <></>}
+      <div className='titleRow'>
+        <h1 className='title'>React SRS Flashcards</h1>
+        <button className='logoutButton' onClick={handleLogout}>Logout</button>
+      </div>
       <form onSubmit={createDeck}>
           <input className='createInput' value={newDeckName} onChange={handleChange} placeholder='Deck Name...' required/>
           <button className='createButton'>Create Deck</button>

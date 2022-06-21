@@ -87,6 +87,37 @@ html, body {
     color: aqua;
     transition: 0.3s;
 }
+
+.titleRow {
+    display: inline-flex;
+    margin: 0 auto;
+}
+
+.logoutButton {
+    border: solid 4px aqua;
+    border-radius: 15px;
+    background-color: rgb(66, 64, 64);
+    color: aqua;
+    font-size: 20px;
+    padding: 5px;
+    height: 50px;
+    margin-left: 20px;
+    margin-top: 50px;
+    transition: 0.3s;
+}
+
+.logoutButton:hover {
+    border: solid 4px aqua;
+    border-radius: 15px;
+    background-color: gray;
+    color: aqua;
+    font-size: 20px;
+    padding: 5px;
+    height: 50px;
+    margin-left: 20px;
+    margin-top: 50px;
+    transition: 0.3s;
+}
 /* Decks */
 
 /* Cards */
@@ -250,6 +281,16 @@ html, body {
     transition: 0.5s;
 }
 
+.finishMessage {
+    margin-top: 80px;
+    font-size: 35px;
+}
+
+.noCardsMessage {
+    margin-top: 80px;
+    font-size: 35px; 
+}
+
 /* Cards */
 
 
@@ -277,7 +318,7 @@ html, body {
 }
 
 .modalContainer {
-    background-color: gray;
+    background-color: rgb(28, 26, 26);
     width: 40%;
     margin: 0 auto;
     border-color: aqua;
