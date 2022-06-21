@@ -280,46 +280,52 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     <>
     <div className='page'>
     {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
-        <h1>{currentDeck}</h1>
-        <div>
-
-
+        <h1 className='currentTitle'>{currentDeck}</h1>
+        <div className='topRowCards'>
+          <button className='ReturnDecksButton' onClick={back}>Decks</button>
+          <button className='StudyButton' onClick={showCards}>Study</button>
+          <button className='DeleteDeckButton' onClick={deleteDeck}>Delete Deck</button>
         </div>
-        <button onClick={back}>Decks</button>
-        <button onClick={deleteDeck}>Delete Deck</button>
-        <div className='Cardsbuttons'>
-            <button onClick={open}>Add Card</button>
-            <button onClick={showCards}>Study</button>
+        <div className='addRow'>
+            <button className='AddCardButton' onClick={open}>Add Card</button>
         </div>
-        {showingCards && newCardsLength > 0 ? <>{failure && newCardsLength > 1 ? <h1>{newCards[1].front}</h1> : <h1>{newCards[0].front}</h1>}
+        {showingCards && newCardsLength > 0 ? <>{failure && newCardsLength > 1 ? <h1 className='cardName'>{newCards[1].front}</h1> : <h1 className='cardName'>{newCards[0].front}</h1>}
         <div className='responses'>
         {response===true ? <>
-            {failure && newCardsLength > 1 ? <h1>{newCards[1].back}</h1> : <h1>{newCards[0].back}</h1>}
-            <button onClick={handleAnswerAgainNew}>Again</button>
-            <button onClick={handleAnswerHard}>Hard</button>
-            <button onClick={handleAnswerNormal}>Normal</button>
-            <button onClick={handleAnswerEasy}>Easy</button></> : <>
-            <div className='card-counters'>
-              <p>{newCardsLength}</p>
-              <p>{reviewCardsLength}</p>
+            {failure && newCardsLength > 1 ? <h1 className='cardNameAnswer'>{newCards[1].back}</h1> : <h1 className='cardNameAnswer'>{newCards[0].back}</h1>}
+            <div className='cardCounters'>
+              <p className='newCardsCounter'>{newCardsLength}</p>
+              <p className='reviewCardsCounter'>{reviewCardsLength}</p>
             </div>
-            <button onClick={handleResponse}>Show Response</button>
+            <button className='choicesButton' onClick={handleAnswerAgainNew}>Again</button>
+            <button className='choicesButton' onClick={handleAnswerHard}>Hard</button>
+            <button className='choicesButton' onClick={handleAnswerNormal}>Normal</button>
+            <button className='choicesButton' onClick={handleAnswerEasy}>Easy</button></> : <>
+            <div className='cardCountersBefore'>
+              <p className='newCardsCounter'>{newCardsLength}</p>
+              <p className='reviewCardsCounter'>{reviewCardsLength}</p>
+            </div>
+            <button className='responseButton' onClick={handleResponse}>Show Response</button>
             </>}
           </div></>
         : <div></div>}
-        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure && reviewCardsLength > 1 ? <h1>{reviewCards[1].front}</h1> : <h1>{reviewCards[0].front}</h1>}
+        {showingCards && newCardsLength === 0 && reviewCardsLength > 0 ? <>{failure && reviewCardsLength > 1 ? <h1 className='cardName'>{reviewCards[1].front}</h1> : <h1 className='cardName'>{reviewCards[0].front}</h1>}
         <div className='responses'>
         {response===true ? <>
-            {failure && reviewCardsLength > 1 ? <h1>{reviewCards[1].back}</h1> : <h1>{reviewCards[0].back}</h1>}
-            <button onClick={handleAnswerAgainReview}>Again</button>
-            <button onClick={handleAnswerHardReview}>Hard</button>
-            <button onClick={handleAnswerNormalReview}>Normal</button>
-            <button onClick={handleAnswerEasyReview}>Easy</button></> : <>
-            <div className='card-counters'>
-              <p>{newCardsLength}</p>
-              <p>{reviewCardsLength}</p>
+            {failure && reviewCardsLength > 1 ? <h1 className='cardNameAnswer'>{reviewCards[1].back}</h1> : <h1 className='cardNameAnswer'>{reviewCards[0].back}</h1>}
+            <div className='cardCounters'>
+              <p className='newCardsCounter'>{newCardsLength}</p>
+              <p className='reviewCardsCounter'>{reviewCardsLength}</p>
             </div>
-            <button onClick={handleResponse}>Show Response</button>
+            <button className='choicesButton' onClick={handleAnswerAgainReview}>Again</button>
+            <button className='choicesButton' onClick={handleAnswerHardReview}>Hard</button>
+            <button className='choicesButton' onClick={handleAnswerNormalReview}>Normal</button>
+            <button className='choicesButton' onClick={handleAnswerEasyReview}>Easy</button></> : <>
+            <div className='cardCountersBefore'>
+              <p className='newCardsCounter'>{newCardsLength}</p>
+              <p className='reviewCardsCounter'>{reviewCardsLength}</p>
+            </div>
+            <button className='responseButton' onClick={handleResponse}>Show Response</button>
             </>}
           </div></>
         : <div></div>}

@@ -29,6 +29,7 @@ html, body {
 }
 
 .deckButton {
+    cursor: pointer;
     width: 250px;
     font-size: 20px;
     font-weight: bold;
@@ -67,6 +68,7 @@ html, body {
 }
 
 .createButton {
+    cursor: pointer;
     font-size: 18px;
     padding: 10px;
     border: solid 4px aqua;
@@ -85,12 +87,170 @@ html, body {
     color: aqua;
     transition: 0.3s;
 }
-
-
 /* Decks */
 
+/* Cards */
 
+.currentTitle {
+    font-size: 60px;
+}
 
+.topRowCards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.ReturnDecksButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-left: 40px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.5s;
+}
+
+.ReturnDecksButton:hover {
+    background-color: gray;
+    color: aqua;
+    transition: 0.5s;
+}
+
+.StudyButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-left: 50px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.5s;
+}
+
+.StudyButton:hover {
+    background-color: gray;
+    color: aqua;
+    transition: 0.5s;
+}
+
+.DeleteDeckButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-right: 40px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.5s;
+}
+
+.DeleteDeckButton:hover {
+    background-color: rgb(217, 16, 16);
+    color: rgb(0, 9, 9);
+    transition: 0.5s;
+}
+
+.AddCardButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-top: 20px;
+    margin-left: 40px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.5s;
+}   
+
+.AddCardButton:hover {
+    background-color: gray;
+    color: aqua;
+    transition: 0.5s;
+}
+
+.cardName {
+    margin-top: 40px;
+    font-size: 50px;
+}
+
+.cardNameAnswer {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    font-size: 50px;
+}
+
+.responseButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-top: 20px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.5s;
+}
+
+.responseButton:hover {
+    background-color: gray;
+    color: aqua;
+    transition: 0.5s;
+}
+
+.cardCounters p {
+    display: inline-flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 0px;
+}
+
+.cardCountersBefore p {
+    display: inline-flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 200px;
+    margin-bottom: 0px;
+}
+
+.newCardsCounter {
+    color: rgb(0, 136, 255);
+}
+
+.reviewCardsCounter {
+    color: rgb(3, 211, 3);
+}
+
+.choicesButton {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgb(66, 64, 64);
+    font-size: 18px;
+    margin-top: 20px;
+    border: solid 4px aqua;
+    border-radius: 15px;
+    padding: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: 0.5s;
+}
+
+.choicesButton:hover {
+    background-color: gray;
+    color: aqua;
+    transition: 0.5s;
+}
+
+/* Cards */
 
 
 
@@ -138,11 +298,13 @@ html, body {
 };
 
 .modalTitle button {
+    cursor: pointer;
     height: 40px;
     width: 50px;
 }
 
 .closeButton {
+    cursor: pointer;
     height: 40px;
     width: 80px;
     border-top-right-radius: 15px;
@@ -165,6 +327,8 @@ html, body {
 }
 
 .modalInputs input {
+    background-color: rgb(80, 79, 79);
+    color: aqua;
     margin: 10px;
     height: 20px;
     width: 200px;
@@ -181,6 +345,8 @@ html, body {
 }
 
 .addButton {
+    cursor: pointer;
+    background-color: rgb(80, 79, 79);
     width: 130px;
     height: 50px;
     margin: 20px;
@@ -192,6 +358,7 @@ html, body {
 
 .addButton:hover {
     background-color: rgb(80, 79, 79);
+    color: aqua;
     transition: 0.5s;
 }
 

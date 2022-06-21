@@ -85,11 +85,11 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
                 <div className='modalInputs'>
                     <label>
                         Front:
-                        <input value={newCardFront} onChange={handleChangeFront} required/>
+                        <input value={newCardFront} onChange={handleChangeFront} placeholder='Type here...' required/>
                     </label>
                     <label>
                         Back:
-                        <input value={newCardBack} onChange={handleChangeBack} required/>
+                        <input value={newCardBack} onChange={handleChangeBack} placeholder='Type here...' required/>
                     </label>
                 </div>
                     <button className='addButton'>Add Card</button>
