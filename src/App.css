@@ -405,3 +405,124 @@ html, body {
 }
 
 /* Modal */
+
+@media (max-width: 650px) {
+    /* Decks */
+    .title {
+        font-size: 30px;
+    }
+
+    .createInput {
+        width: 150px;
+        height: 15px;
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .createButton {
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .logoutButton {
+        font-size: 15px;
+        padding: 5px;
+        height: 50px;
+        margin-left: 20px;
+        margin-top: 3%;
+    }
+
+    .decksContainer {
+        margin-top: 0px;
+    }
+
+    .decksTitle {
+        font-size: 30px;
+    }
+    /* Decks */
+
+    /* Cards */
+    .currentTitle {
+        font-size: 40px;
+    }
+
+    .ReturnDecksButton {
+        font-size: 15px;
+        margin-left: 20px;
+        padding: 8px;
+    }
+
+    .StudyButton {
+        font-size: 15px;
+        margin-left: 40px;
+        padding: 8px;
+    }
+
+    .DeleteDeckButton {
+        font-size: 15px;
+        margin-right: 10px;
+        padding: 8px;
+    }
+
+    .AddCardButton {
+        font-size: 15px;
+        margin-top: 20px;
+        margin-left: 20px;
+        padding: 8px;
+    }   
+
+    .cardName {
+        margin-top: 60px;
+        font-size: 40px;
+    }
+    
+    .cardNameAnswer {
+        margin-top: 40px;
+        margin-bottom: 120px;
+        font-size: 40px;
+    }
+
+    .responseButton {
+        font-size: 15px;
+        margin-top: 20px;
+        padding: 8px;
+    }
+
+    .choicesButton {
+        font-size: 15px;
+        padding: 8px;
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+
+    .finishMessage {
+        margin-top: 60px;
+        font-size: 25px;
+    }
+    
+    .noCardsMessage {
+        margin-top: 60px;
+        font-size: 25px; 
+    }
+    /* Cards */
+
+    /* Modal */
+    .modalTitle {
+        font-size: 20px;
+    }
+    
+    .modalTitle h1 {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .modalContainer {
+        background-color: rgb(28, 26, 26);
+        width: 80%;
+    }
+
+    .addButton {
+        font-size: 18px;
+    }
+    /* Modal */
+}

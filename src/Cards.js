@@ -233,7 +233,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     };
 
     await setDoc(doc(db, "cards", reviewCards[0].id), {
-      interval: 0,
+      interval: 1,
       dateTime: today,
     }, { merge: true });
 
