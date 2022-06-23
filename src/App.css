@@ -538,7 +538,8 @@ html, body {
     
     .modalContainer {
         background-color: rgb(28, 26, 26);
-        width: 80%;
+        width: 85%;
+        margin-top: 130px;
     }
 
     .addButton {
