@@ -1,11 +1,10 @@
 import './App.css';
-import React, {useState, useEffect, useRef} from "react";
 
 // Firebase imports
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { getDoc, collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
+import {collection, doc, deleteDoc, getDocs, query, where} from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -15,26 +14,17 @@ firebase.initializeApp({
     storageBucket: "react-srs-app-b4511.appspot.com",
     messagingSenderId: "369393619126",
     appId: "1:369393619126:web:7889db4611da2724bb9617"
-})
+});
 
+// Firebase Database
 const db = firebase.firestore();
 
 const DeleteDeckModal = ({ closeDeleteModal, currentDeck }) => {
-    const [newCardFront, setNewCardFront] = useState("");
-    const [newCardBack, setNewCardBack] = useState("");
-
-    const [cards, setCards] = useState([]);
-    const [decks, setDecks] = useState([]);
-    const [newDeckName, setNewDeckName] = useState("");
-    const cardsRef = db.collection('cards');
-    const decksRef = db.collection('decks');
-
     // Need a new reference to work correctly with deletion
     const decksRef2 = collection(db, "decks");
     const cardsRef2 = collection(db, "cards");
 
-    let today = new Date().toLocaleDateString();
-
+    // Close Modal
     function close() {
         closeDeleteModal(false);
     };

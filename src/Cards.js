@@ -1,6 +1,5 @@
 import './App.css';
-import axios from "axios";
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import Modal from './Modal';
 import DeleteDeckModal from './DeleteDeckModal';
 
@@ -8,7 +7,7 @@ import DeleteDeckModal from './DeleteDeckModal';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
+import { collection, doc, setDoc, deleteDoc, getDocs, query, where, limit } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -20,44 +19,51 @@ firebase.initializeApp({
   appId: "1:369393619126:web:7889db4611da2724bb9617"
 })
 
+// Firebase Database
 const db = firebase.firestore();
 
-const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
+const Cards = ( {setStudying, currentDeck}) => {
+  // Set the current cards and decks
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
+
+  // Toggle open and closings Modals
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  // Check if there are cards for current deck
   const [cardsExist, setCardsExist] = useState(false);
   const [newCardsExist, setNewCardsExist] = useState(false);
-  const cardsRef = db.collection('cards');
-  const decksRef = db.collection('decks');
 
+  // Refer to decks, check if user pressed Again response (to only change to another card)
+  const decksRef = db.collection('decks');
   const [failure, setFailure] = useState(false);
 
+  // Checl for toggling showing cards to study and when to respond/show answer
   const [showingCards, setShowingCards] = useState(false);
   const [response, setResponse] = useState(false);
 
+  // Refer to and set New and Review Cards, check if session finished (no cards in queue)
   const [newCards, setNewCards] = useState([]);
   const [reviewCards, setReviewCards] = useState([]);
-
   const [finish, setFinish] = useState(false);
 
   let cardsLength = cards.length;
   let newCardsLength = newCards.length;
   let reviewCardsLength = reviewCards.length;
 
+  // Get Current Date in an easy to change format for the algorithm
   let today = new Date().toLocaleDateString();
-
   const currentMonth = Number(today.split(/[/]/)[0]);
   const currentDay = Number(today.split(/[/]/)[1]);
   const currentYear = Number(today.split(/[/]/)[2]);
 
-  // Need a new reference to work correctly with deletion
+  // Refer to the Decks and Cards in the DB
   const decksRef2 = collection(db, "decks");
   const cardsRef2 = collection(db, "cards");
 
-  const currentCardRef = doc(db, 'cards', 'selectedCard');
-
+  // Used as a function to refresh cards when the DB changes, grabs all decks and cards for the deck and limits them to 20 (New Cards) and 50 (Review Cards)
+  // This way the user is not overwhelmed with cards to study
   const getDbmessages = async () => {
     const currentCardsRef = query(cardsRef2, where('deck', '==', currentDeck));
     const currentQuerySnapshot = await getDocs(currentCardsRef);
@@ -75,6 +81,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     setReviewCards(querySnapshot2.docs.map((doc) => ({ ...doc.data(), id: doc.id})));
   };
 
+  // Same as above, grab newest version of database on page load as well as updates new cards for today's date
   useEffect(() => {
     const getDbmessages = async () => {
       const currentCardsRef = query(cardsRef2, where('deck', '==', currentDeck));
@@ -98,11 +105,13 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
 
     }, []);
 
+    // Keep checking if there are cards in queue (Changes display message)
     useEffect(() => {
       DoCardsExist();
       FinishSession();
     });
 
+    // If no cards left, display a message
     function FinishSession() {
       if (newCardsLength === 0 && reviewCardsLength === 0) {
         setFinish(true);
@@ -111,6 +120,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       };
     };
 
+    // Sets all New Cards to current Date
     const getDateTime = async (e) => {
       const allNew = query(cardsRef2, where('status', '==', 'NewCard'));
       const newSnapshot = await getDocs(allNew);
@@ -121,11 +131,12 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       });
     };
 
-    // Open Delete Deck Modal Screen
+    // Open Add Cards Modal Screen
     function open() {
       setOpenModal(true);
     };
 
+    // Open Delete Deck Modal Screen
     function openDelete() {
       setOpenDeleteModal(true);
     };
@@ -152,6 +163,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
       window.location.reload(false);
   };
 
+  // Show cards or display messages
   function showCards() {
     if (cardsExist === true && finish === false) {
       setShowingCards(true);
@@ -167,10 +179,27 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     }
   };
 
+  // Toggle show answer
   function handleResponse() {
     setResponse(true);
   };
 
+  // Check if there are cards
+  function DoCardsExist() {
+    if (cardsLength > 0) {
+      setCardsExist(true);
+    };
+    if (newCardsLength > 0) {
+      setNewCardsExist(true);
+    };
+  };
+
+  // Everything below this point is the Algorithm that handles all the study responses
+  // All the Algorithm does is depending on the user's response it will change the cards date to when they will see it next
+  // Checks are made to how early or late in the month it is to prevent changing the date to a date that doesn't exist (Ex: 6/43/2022)
+  // The interval determines how long each response changes the date, it's increased each time a card is remembered 
+
+  // If again is pressed, change to the second card
   function handleAnswerAgainNew() {
     setResponse(false);
     if (failure === true) {
@@ -219,15 +248,6 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     }, { merge: true });
 
     getDbmessages();
-  };
-
-  function DoCardsExist() {
-    if (cardsLength > 0) {
-      setCardsExist(true);
-    };
-    if (newCardsLength > 0) {
-      setNewCardsExist(true);
-    };
   };
 
   const handleAnswerAgainReview = async (e) => {

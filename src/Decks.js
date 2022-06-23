@@ -1,14 +1,13 @@
 import './App.css';
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 
 import Login from './Login';
-import useLocalStorage from "./useLocalStorage";
 
 // Firebase imports
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -20,18 +19,24 @@ firebase.initializeApp({
   appId: "1:369393619126:web:7889db4611da2724bb9617"
 })
 
+// Firebase Database
 const db = firebase.firestore();
 
 const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck, name, setName}) => {
+  // Refer to cards and decks
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
+
+  // Set name for new decks when created and reference cards
   const [newDeckName, setNewDeckName] = useState("");
   const cardsRef = db.collection('cards');
+
+  // Refer to each deck
   const decksRef = db.collection('decks');
-
   const decksRef2 = collection(db, "decks");
-  const cardsRef2 = collection(db, "cards");
 
+
+  // On page load grab all the decks and cards and refresh DB
   useEffect(() => {
     const getDbmessages = async () => {
       const cards = await getDocs(cardsRef.orderBy('createdAt', "asc"));
@@ -46,6 +51,7 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck, name, setNa
 
     }, [])
 
+    // Create a new deck and add it to the DB, then reload too see changes
     const createDeck = async (e) => {
         e.preventDefault();
         await decksRef.add({
@@ -56,11 +62,13 @@ const Decks = ( {studying, setStudying, currentDeck, setCurrentDeck, name, setNa
         window.location.reload(false);
     }
 
+    // Set the current deck to the name of the deck on the selected button, change to study screen
     function study(e) {
         setStudying(true);
         setCurrentDeck(e.target.innerText);
     };
 
+    // Grab user input
     function handleChange(e) {
         setNewDeckName(e.target.value);
       };

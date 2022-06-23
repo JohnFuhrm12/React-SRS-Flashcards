@@ -1,11 +1,11 @@
 import './App.css';
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 
 // Firebase imports
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { getDoc, collection, doc, setDoc, deleteDoc, getDocs, query, where, getFirestore, orderBy, limit } from "firebase/firestore";
+import { getDocs } from "firebase/firestore";
 
 // Initialize Firebase Database
 firebase.initializeApp({
@@ -17,20 +17,24 @@ firebase.initializeApp({
     appId: "1:369393619126:web:7889db4611da2724bb9617"
 })
 
+// Firebase Database
 const db = firebase.firestore();
 
 const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure }) => {
+    // Set front and back of new cards when created
     const [newCardFront, setNewCardFront] = useState("");
     const [newCardBack, setNewCardBack] = useState("");
 
+    // Grab cards and decks
     const [cards, setCards] = useState([]);
     const [decks, setDecks] = useState([]);
-    const [newDeckName, setNewDeckName] = useState("");
     const cardsRef = db.collection('cards');
     const decksRef = db.collection('decks');
 
+    // Get current Date 
     let today = new Date().toLocaleDateString();
 
+    // Grab cards and decks from DB on load
     useEffect(() => {
         const getDbmessages = async () => {
           const cards = await getDocs(cardsRef.orderBy('dateTime', "asc"));
@@ -45,6 +49,7 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
     
         }, [])
 
+    // Create a new card when button is pressed then refresh input and DB, interval starts at 0 and date is set to today
     const createCard = async (e) => {
         e.preventDefault();
         await cardsRef.add({
@@ -61,17 +66,19 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
         getDbmessages();
     };
 
+    // Close Modal
     function close() {
         closeModal(false);
     };
 
+    // Grab user input
     function handleChangeFront(e) {
         setNewCardFront(e.target.value);
       };
 
-      function handleChangeBack(e) {
+    function handleChangeBack(e) {
         setNewCardBack(e.target.value);
-      };
+    };
 
     return (
         <>
