@@ -2,6 +2,7 @@ import './App.css';
 import axios from "axios";
 import React, {useState, useEffect, useRef} from "react";
 import Modal from './Modal';
+import DeleteDeckModal from './DeleteDeckModal';
 
 // Firebase imports
 import firebase from 'firebase/compat/app';
@@ -25,6 +26,7 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
   const [cards, setCards] = useState([]);
   const [decks, setDecks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [cardsExist, setCardsExist] = useState(false);
   const [newCardsExist, setNewCardsExist] = useState(false);
   const cardsRef = db.collection('cards');
@@ -122,6 +124,10 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     // Open Delete Deck Modal Screen
     function open() {
       setOpenModal(true);
+    };
+
+    function openDelete() {
+      setOpenDeleteModal(true);
     };
 
     // Return to Decks
@@ -412,11 +418,12 @@ const Cards = ( {studying, setStudying, currentDeck, setCurrentDeck}) => {
     <>
     <div className='page'>
     {openModal && <Modal closeModal={setOpenModal} currentDeck={currentDeck} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
+    {openDeleteModal && <DeleteDeckModal currentDeck={currentDeck} deleteDeck={deleteDeck} closeDeleteModal={setOpenDeleteModal} setStudying={setStudying} getDbmessages={getDbmessages} setFailure={setFailure}/>}
         <h1 className='currentTitle'>{currentDeck}</h1>
         <div className='topRowCards'>
           <button className='ReturnDecksButton' onClick={back}>Decks</button>
           <button className='StudyButton' onClick={showCards}>Study</button>
-          <button className='DeleteDeckButton' onClick={deleteDeck}>Delete Deck</button>
+          <button className='DeleteDeckButton' onClick={openDelete}>Delete Deck</button>
         </div>
         <div className='addRow'>
             <button className='AddCardButton' onClick={open}>Add Card</button>

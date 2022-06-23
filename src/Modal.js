@@ -62,7 +62,7 @@ const Modal = ({ closeModal, currentDeck, setStudying, getDbmessages, setFailure
     };
 
     function close() {
-        closeModal(false)
+        closeModal(false);
     };
 
     function handleChangeFront(e) {
