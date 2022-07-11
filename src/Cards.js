@@ -102,6 +102,7 @@ const Cards = ( {setStudying, currentDeck}) => {
 
     getDbmessages();
     getDateTime();
+    updateReview();
 
     }, []);
 
@@ -125,6 +126,17 @@ const Cards = ( {setStudying, currentDeck}) => {
       const allNew = query(cardsRef2, where('status', '==', 'NewCard'));
       const newSnapshot = await getDocs(allNew);
       newSnapshot.forEach((docu) => {
+        setDoc(doc(db, "cards", docu.id), {
+          dateTime: today,
+        }, { merge: true });
+      });
+    };
+
+    // Sets all Review Cards Before Current Date To Current Date
+    const updateReview = async (e) => {
+      const allReview = query(cardsRef2, where('status', '==', 'ReviewCard'), where('dateTime', '<', today));
+      const reviewSnapshot = await getDocs(allReview);
+      reviewSnapshot.forEach((docu) => {
         setDoc(doc(db, "cards", docu.id), {
           dateTime: today,
         }, { merge: true });
